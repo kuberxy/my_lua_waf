@@ -52,7 +52,7 @@ local function log(ip,filter,uri,data,ruletag)
     }
     local log_line = cjson.encode(log_json_obj)
 
-    local log_name = log_dir..'/'..ngx.today().."_waf.log"
+    local log_name = log_dir .. '/' .. 'waf_' .. ngx.today() .. '.log'
     local file = io.open(log_name,"a")
     if file then
         file:write(log_line.."\n")
