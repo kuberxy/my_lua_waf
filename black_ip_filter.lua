@@ -36,7 +36,7 @@ local function get_rule(file)
 end
 
 -- record log by json format to file
-local function log(ip,filter,uri,data,ruletag)
+local function log(ip,filter,uri,data,rule)
     local io = require('io')
     local cjson = require('cjson')
 
@@ -48,7 +48,7 @@ local function log(ip,filter,uri,data,ruletag)
         attack_method = filter,
         req_uri = uri,
         req_data = data,
-        rule_tab = rultetag,
+        match_rule = rule,
     }
     local log_line = cjson.encode(log_json_obj)
 
@@ -71,7 +71,7 @@ local function black_ip_filter()
         if next(ip_black_list) then
             for _,rule_ip in ipairs(ip_black_list) do
                 if client_ip == rule_ip then
-                    log(client_ip,'black_ip',ngx.var_request_uri,'-','-')
+                    log(client_ip,'black_ip',ngx.var_request_uri,'-',rule_ip)
                     ngx.eixt(403)
                 end
             end
