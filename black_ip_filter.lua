@@ -29,9 +29,9 @@ local function get_rule(file)
         for line in rule_file:lines() do
             table.insert(rule_table,line)
         end
+        rule_file:close()
     end
-    rule_file:close()
-
+    
     return rule_table
 end
 
@@ -57,8 +57,8 @@ local function log(ip,filter,uri,data,rule)
     if file then
         file:write(log_line..'\n')
         file:flush()
+        file:close()
     end
-    file:close()
 end
 
 -- filter client ip whether in ip black list
