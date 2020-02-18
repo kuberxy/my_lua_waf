@@ -49,7 +49,7 @@ local function cc_attack_filter()
         local current_rate,_ = cc_counter:get(cc_key)
         if current_rate then
             if current_rate > cc_count then
-                log(client_ip,'cc_attack',ngx.var.uri,'-',cc_rate)
+                log(client_ip,'cc',ngx.var.uri,'-',cc_rate)
                 ngx.exit(403)
                 return true
             else
