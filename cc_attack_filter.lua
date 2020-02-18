@@ -38,7 +38,7 @@ local function log(ip,filter,uri,data,rule)
     end
 end
 
-function cc_attack_filter()
+local function cc_attack_filter()
     if enable_cc_attack_filter == "on" then
         local client_ip = get_client_ip()
         local cc_key =  client_ip .. ngx.var.uri
