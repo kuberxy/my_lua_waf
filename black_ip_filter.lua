@@ -71,7 +71,7 @@ local function black_ip_filter()
         if next(ip_black_list) then
             for _,rule_ip in ipairs(ip_black_list) do
                 if client_ip == rule_ip then
-                    log(client_ip,'black_ip',ngx.var_request_uri,'-',rule_ip)
+                    log(client_ip,'black_ip',ngx.var.uri,'-',rule_ip)
                     ngx.eixt(403)
                 end
             end

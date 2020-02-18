@@ -71,7 +71,7 @@ local function user_agent_filter()
         if client_user_agent and next(user_agent_list) then
             for _,rule_user_agent in ipairs(user_agnet_list) do
                 if rulematcher(client_user_agent,rule_user_agent,'jo') then
-                    log(get_client_ip(),'user_agent','ngx.var_request_uri','-',rule_user_agent)
+                    log(get_client_ip(),'user_agent',ngx.var.uri,'-',rule_user_agent)
                     ngx.eixt(403)
                     return true
                 end

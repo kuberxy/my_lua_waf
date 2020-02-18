@@ -69,7 +69,7 @@ local function white_ip_filter()
         if next(ip_white_list) then
             for _,rule_ip in ipairs(ip_white_list) do
                 if client_ip == rule_ip then
-                    log(client_ip,'white_ip',ngx.var_request_uri,'-',rule_ip)
+                    log(client_ip,'white_ip',ngx.var.uri,'-',rule_ip)
                     return true
                 end
             end
