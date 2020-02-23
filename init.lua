@@ -55,7 +55,7 @@ function _M.black_ip_filter()
                         tools.log(client_ip,'black_ip',ngx.var.request_uri,client_ip)
                     end
                     if log_mode ~= "on" then
-                        ngx.eixt(403)
+                        ngx.exit(403)
                         return true
                     end
                 end

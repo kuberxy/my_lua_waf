@@ -30,13 +30,12 @@ function _M.get_rule(file)
 end
 
 -- record log by json format to file
-function _M.log(ip,filter,uri,data,rule)
+function _M.log(ip,filter,uri,rule)
     local cjson = require('cjson')
     
     local log_json_obj = {
         client_ip = ip,
         local_time = ngx.localtime(),
-        server_name = ngx.var.server_name,
         user_agent = ngx.var.http_user_agent,
         attack_method = filter,
         req_uri = uri,
