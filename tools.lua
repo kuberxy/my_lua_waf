@@ -70,7 +70,7 @@ function _M.filter_request_body(client_post_args)
         for _,rule_post_args in ipairs(post_args_list) do
             if finder(ngx.unescape_uri(client_post_args),rule_post_args,'isjo') then
                 if enable_attack_log == 'on' then
-                    _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,'client_post_args')
+                    _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,client_post_args)
                 end
                 if log_mode ~= "on" then
                     ngx.exit(403)
