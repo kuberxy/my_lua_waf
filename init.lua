@@ -68,7 +68,7 @@ end
 function _M.black_url_filter()
     if enable_waf == 'on' and enable_black_url_filter == 'on' then
         local client_request_uri = ngx.var.request_uri
-        local url_black_list = tools.get_rule('blackurl.rule')
+        local url_black_list = tools.get_rule('black_url.rule')
         if next(url_black_list) then
             for _,rule_uri in ipairs(url_black_list) do
                 if rulefinder(client_request_uri,rule_uri,'isjo') then
@@ -90,10 +90,9 @@ function _M.user_agent_filter()
     if enable_waf == 'on' and enable_user_agent_filter == 'on' then
         local client_user_agent = ngx.var.http_user_agent
         if client_user_agent then
-            local user_agnet_list = tools.get_rule('useragent.rule')
+            local user_agent_list = tools.get_rule('user_agent.rule')
             if next(user_agent_list) then
-                local rulefinder = ngx.re.find
-                for _,rule_user_agent in ipairs(user_agnet_list) do
+                for _,rule_user_agent in ipairs(user_agent_list) do
                     if rulefinder(client_user_agent,rule_user_agent,'isjo') then
                         if enable_attack_log == 'on' then
                             tools.log(tools.get_client_ip(),'user_agent',ngx.var.request_uri,client_user_agent)
@@ -199,7 +198,7 @@ function _M.post_args_filter()
                 ngx.req.append_body(data)
 
                 -- 直接过滤读取到的数据
-                if filter_request_body(data) then
+                if tools.filter_request_body(data) then
                     return true
                 end
 
@@ -210,7 +209,7 @@ function _M.post_args_filter()
                     return true
                 else
                     if rulefinder(data,"Content-Disposition:",'isjo') then
-                        if filter_request_body(data) then
+                        if tools.filter_request_body(data) then
                             return true
                         end
                     end
@@ -233,7 +232,7 @@ function _M.post_args_filter()
                 return
             end
 
-            for k,v in pairs(client_post_args) then
+            for k,v in pairs(client_post_args) do
                 if type(v) == "table" then
                     data = table.concat(v, ", ")
                 else
@@ -241,7 +240,7 @@ function _M.post_args_filter()
                 end
 
                 if data then
-                    if filter_request_body(data) or filter_request_body(k) then
+                    if tools.filter_request_body(data) or tools.filter_request_body(k) then
                         return true
                     end
                 end

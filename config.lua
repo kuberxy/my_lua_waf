@@ -1,12 +1,12 @@
 -- enable waf and filter rules path. 
 -- if log_mode is "on" then only record attack log but not reject request
 enable_waf = 'on'
-rule_dir = "./rules"
+rule_dir = "/usr/local/openresty/nginx/waf/rules"
 log_mode = 'on'
 
 -- record attack log and attack log path
 enable_attack_log = 'on'
-log_dir = './logs'
+log_dir = '/usr/local/openresty/nginx/waf/logs'
 
 -- enable white_ip filter
 enable_white_ip_filter = 'on'
@@ -27,10 +27,10 @@ enable_user_agent_filter = 'on'
 enable_cookie_attack_filter = "on"
 
 -- enable get_args filter
-enable_get_args_filter == 'on'
+enable_get_args_filter = 'on'
 
 -- enable post_args filter
-enable_post_args_filter == 'on'
+enable_post_args_filter = 'on'
 balck_file_suffix = {"php","jsp"}
 
 -- enable cc_attack filter and cc rate(the xxx of xxx seconds) 

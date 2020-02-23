@@ -68,8 +68,8 @@ end
 function _M.filter_request_body(client_post_args)
     local post_args_list = _M.get_rule('post_args.rule')
     if next(post_args_list) then
-        for _,rule_post_args in ipairs(post_args_list) then
-            if finder(ngx.unescape_uri(client_post_args,rule,'isjo')) then
+        for _,rule_post_args in ipairs(post_args_list) do
+            if finder(ngx.unescape_uri(client_post_args,rule_post_args,'isjo')) then
                 if enable_attack_log == 'on' then
                     _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,'client_post_args')
                 end
