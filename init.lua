@@ -148,7 +148,7 @@ function _M.get_args_filter()
                     end
                     if client_get_args and client_get_args ~= "" then
                         for _,rule_get_args in ipairs(get_args_table) do
-                            if rulefinder(ngx.unescape_uri(client_get_args),rule,"isjo") then
+                            if rulefinder(ngx.unescape_uri(client_get_args),rule_get_args,"isjo") then
                                 if enable_attack_log == 'on' then
                                     tools.log(tools.get_client_ip(),'get_args',ngx.var.request_uri,client_get_args)
                                 end
