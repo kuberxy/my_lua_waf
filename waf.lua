@@ -8,7 +8,7 @@ local function main()
     elseif waf.user_agent_filter() then
     elseif waf.cookie_filter() then
     elseif waf.get_args_filter() then
-    -- elseif waf.post_args_filter() then
+    elseif waf.post_args_filter() then
     elseif waf.cc_attack_filter() then
     else
         return

@@ -40,7 +40,6 @@ function _M.log(ip,filter,uri,data,rule)
         user_agent = ngx.var.http_user_agent,
         attack_method = filter,
         req_uri = uri,
-        req_data = data,
         match_rule = rule,
     }
     local log_line = cjson.encode(log_json_obj)
@@ -71,9 +70,13 @@ function _M.filter_request_body(client_post_args)
     if next(post_args_list) then
         for _,rule_post_args in ipairs(post_args_list) then
             if finder(ngx.unescape_uri(client_post_args,rule,'isjo')) then
-                _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,'client_post_args','-')
-                ngx.exit(403)
-                return true
+                if enable_attack_log == 'on' then
+                    _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,'client_post_args')
+                end
+                if log_mode ~= "on" then
+                    ngx.exit(403)
+                    return true
+                end
             end
         end
     end
@@ -83,9 +86,13 @@ function _M.filter_file_suffix(file_suffix)
     if next(balck_file_suffix) then
         for _,rule_suffix in ipairs(balck_file_suffix) do
             if finder(file_suffix,rule_suffix,"jsjo") then
-                _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,'black file suffix',file_suffix)
-                ngx.exit(403)
-                return true
+                if enable_attack_log == 'on' then
+                    _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,file_suffix)
+                end
+                if log_mode ~= "on" then
+                    ngx.exit(403)
+                    return true
+                end
             end
         end
     end

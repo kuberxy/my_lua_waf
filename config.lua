@@ -1,6 +1,8 @@
--- enable waf and filter rules path
+-- enable waf and filter rules path. 
+-- if log_mode is "on" then only record attack log but not reject request
 enable_waf = 'on'
 rule_dir = "./rules"
+log_mode = 'on'
 
 -- record attack log and attack log path
 enable_attack_log = 'on'

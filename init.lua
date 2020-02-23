@@ -7,14 +7,16 @@ local _M = {}
 
 -- filter client ip whether in ip white list
 function _M.white_ip_filter()
-    if enable_white_ip_filter == 'on' then
+    if enable_waf == 'on' and enable_white_ip_filter == 'on' then
         local client_ip = tools.get_client_ip()
         local ip_white_list = tools.get_rule('white_ip.rule')  -- return a table
 
         if next(ip_white_list) then
             for _,rule_ip in ipairs(ip_white_list) do
                 if client_ip == rule_ip then
-                    tools.log(client_ip,'white_ip',ngx.var.request_uri,'-',client_ip)
+                    if enable_attack_log == 'on' then
+                        tools.log(client_ip,'white_ip',ngx.var.request_uri,client_ip)
+                    end
                     return true
                 end
             end
@@ -23,15 +25,16 @@ function _M.white_ip_filter()
 end
 
 -- filter client url whether in url white list
-function _M.black_url_filter()
-    if enable_black_url_filter == 'on' then
+function _M.white_url_filter()
+    if enable_waf == 'on' and enable_white_url_filter == 'on' then
         local client_request_uri = ngx.var.request_uri
-        local url_black_list = tools.get_rule('black_url.rule')
-        if next(url_black_list) then
-            for _,rule_uri in ipairs(url_black_list) do
+        local url_white_list  = tools.get_rule('white_url.rule')
+        if next(url_white_list) then
+            for _,rule_uri in ipairs(url_white_list) do
                 if rulefinder(client_request_uri,rule_uri,'isjo') then
-                    tools.log(tools.get_client_ip(),'black_url',ngx.var.request_uri,'-',client_request_uri)
-                    ngx.exit(403)
+                    if enable_attack_log == 'on' then
+                        tools.log(tools.get_client_ip(),'white_url',ngx.var.request_uri,client_request_uri)
+                    end
                     return true
                 end
             end
@@ -41,16 +44,20 @@ end
 
 -- filter client ip whether in ip black list
 function _M.black_ip_filter()
-    print(enable_black_ip_filter)
-    if enable_black_ip_filter == 'on' then
+    if enable_waf == 'on' and enable_black_ip_filter == 'on' then
         local client_ip = tools.get_client_ip()
         local ip_black_list = tools.get_rule('black_ip.rule')
 
         if next(ip_black_list) then
             for _,rule_ip in ipairs(ip_black_list) do
                 if client_ip == rule_ip then
-                    tools.log(client_ip,'black_ip',ngx.var.request_uri,'-',client_ip)
-                    ngx.eixt(403)
+                    if enable_attack_log == 'on' then
+                        tools.log(client_ip,'black_ip',ngx.var.request_uri,client_ip)
+                    end
+                    if log_mode ~= "on" then
+                        ngx.eixt(403)
+                        return true
+                    end
                 end
             end
         end
@@ -59,15 +66,19 @@ end
 
 -- filter client url whether in url black list
 function _M.black_url_filter()
-    if enable_black_url_filter == 'on' then
+    if enable_waf == 'on' and enable_black_url_filter == 'on' then
         local client_request_uri = ngx.var.request_uri
         local url_black_list = tools.get_rule('blackurl.rule')
         if next(url_black_list) then
             for _,rule_uri in ipairs(url_black_list) do
                 if rulefinder(client_request_uri,rule_uri,'isjo') then
-                    tools.log(tools.get_client_ip(),'black_url',ngx.var.request_uri,'-',client_request_uri)
-                    ngx.exit(403)
-                    return true
+                    if enable_attack_log == 'on' then
+                        tools.log(tools.get_client_ip(),'black_url',ngx.var.request_uri,client_request_uri)
+                    end
+                    if log_mode ~= "on" then
+                        ngx.exit(403)
+                        return true
+                    end
                 end
             end
         end
@@ -76,7 +87,7 @@ end
 
 -- filter client user_agent whether in user_agent black list
 function _M.user_agent_filter()
-    if enable_user_agent_filter == 'on' then
+    if enable_waf == 'on' and enable_user_agent_filter == 'on' then
         local client_user_agent = ngx.var.http_user_agent
         if client_user_agent then
             local user_agnet_list = tools.get_rule('useragent.rule')
@@ -84,9 +95,13 @@ function _M.user_agent_filter()
                 local rulefinder = ngx.re.find
                 for _,rule_user_agent in ipairs(user_agnet_list) do
                     if rulefinder(client_user_agent,rule_user_agent,'isjo') then
-                        tools.log(tools.get_client_ip(),'user_agent',ngx.var.request_uri,'-',client_user_agent)
-                        ngx.exit(403)
-                        return true
+                        if enable_attack_log == 'on' then
+                            tools.log(tools.get_client_ip(),'user_agent',ngx.var.request_uri,client_user_agent)
+                        end
+                        if log_mode ~= "on" then
+                            ngx.exit(403)
+                            return true
+                        end
                     end
                 end
             end
@@ -96,7 +111,7 @@ end
 
 -- filter client cookie whether in cookie black list
 function _M.cookie_filter()
-    if enable_cookie_attack_filter == "on" then
+    if enable_waf == 'on' and enable_cookie_attack_filter == "on" then
         local client_cookie = ngx.var.http_cookie
         if client_cookie then
             local cookie_rule_list = tools.get_rule('cookie.rule')
@@ -104,9 +119,13 @@ function _M.cookie_filter()
                 local rulefinder = ngx.re.find
                 for _,rule_cookie in ipairs(cookie_rule_list) do
                     if rulefinder(client_cookie,rule_cookie,'isjo') then
-                        tools.log(tools.get_client_ip(),'cookie',ngx.var.request_uri,'-',client_cookie)
-                        ngx.exit(403)
-                        return true
+                        if enable_attack_log == 'on' then
+                            tools.log(tools.get_client_ip(),'cookie',ngx.var.request_uri,client_cookie)
+                        end
+                        if log_mode ~= "on" then
+                            ngx.exit(403)
+                            return true
+                        end
                     end
                 end
             end
@@ -116,7 +135,7 @@ end
 
 -- filter client get request args whether in get_args black list
 function _M.get_args_filter()
-    if enable_get_args_filter == 'on' then
+    if enable_waf == 'on' and enable_get_args_filter == 'on' then
         local ngxmatch = ngx.re.find
         local client_get_args_table = ngx.req.get_uri_args()
         if next(client_get_args_table) then
@@ -131,9 +150,13 @@ function _M.get_args_filter()
                     if client_get_args and client_get_args ~= "" then
                         for _,rule_get_args in ipairs(get_args_table) do
                             if rulefinder(ngx.unescape_uri(client_get_args),rule,"isjo") then
-                                tools.log(tools.get_client_ip(),'get_args',ngx.var.request_uri,'-',client_get_args)
-                                ngx.exit(403)
-                                return true
+                                if enable_attack_log == 'on' then
+                                    tools.log(tools.get_client_ip(),'get_args',ngx.var.request_uri,client_get_args)
+                                end
+                                if log_mode ~= "on" then
+                                    ngx.exit(403)
+                                    return true
+                                end
                             end
                         end
                     end
@@ -145,7 +168,7 @@ end
 
 -- filter client post request args whether in post_args black list
 function _M.post_args_filter()
-    if enable_post_args_filter == 'on' and ngx.req.get_method() == "POST" then
+    if enable_waf == 'on' and enable_post_args_filter == 'on' and ngx.req.get_method() == "POST" then
         -- 在客户端请求头中，content-type参数的值包含‘boundary’
         if tools.get_boundary() then
             -- 获取客户端的socket连接
@@ -218,7 +241,7 @@ function _M.post_args_filter()
                 end
 
                 if data then
-                    if filter_request_body(data) or filter_request_body(key) then
+                    if filter_request_body(data) or filter_request_body(k) then
                         return true
                     end
                 end
@@ -229,7 +252,7 @@ end
 
 -- filter client request whether is cc attack
 function _M.cc_attack_filter()
-    if enable_cc_attack_filter == "on" then
+    if enable_waf == 'on' and enable_cc_attack_filter == "on" then
         local client_ip = tools.get_client_ip()
         local cc_key =  client_ip .. ngx.var.uri
         local cc_count = tonumber(string.match(cc_rate,'(.*)/'))
@@ -239,9 +262,13 @@ function _M.cc_attack_filter()
         local current_rate,_ = cc_counter:get(cc_key)
         if current_rate then
             if current_rate > cc_count then
-                tools.log(client_ip,'cc',ngx.var.request_uri,'-',current_rate..'/'..cc_seconds)
-                ngx.exit(403)
-                return true
+                if enable_attack_log == 'on' then
+                    tools.log(client_ip,'cc',ngx.var.request_uri,current_rate..'/'..cc_seconds)
+                end
+                if log_mode ~= "on" then
+                    ngx.exit(403)
+                    return true
+                end
             else
                 cc_counter:incr(cc_key,1)
             end
