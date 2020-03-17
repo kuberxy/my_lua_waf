@@ -33,6 +33,5 @@ enable_get_args_filter = 'on'
 enable_post_args_filter = 'on'
 balck_file_suffix = {"php","jsp"}
 
--- enable cc_attack filter and cc rate(the xxx of xxx seconds) 
-enable_cc_attack_filter = "on"
-cc_rate = "100/60"
+-- enable request rate limiter
+enable_req_rate_limiter = "on"

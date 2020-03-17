@@ -11,7 +11,7 @@ sudo chmod 777 /usr/local/openresty/nginx/waf/logs
 ```
 
 ## 配置
-### nginx
+### openresty
 ```shell
 sudo vim  /usr/local/openresty/nginx/conf/nginx.conf
 ```
@@ -26,7 +26,8 @@ events {
 
 http {
     lua_package_path '/usr/local/openresty/nginx/waf/?.lua;;';
-    lua_shared_dict cc_counter_store 10m;
+    lua_shared_dict limit_rate_store 100m;
+    lua_shared_dict my_locks 100k;
     init_by_lua_file  waf/init.lua;
     access_by_lua_file waf/waf.lua;
 
