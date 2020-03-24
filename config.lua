@@ -31,7 +31,7 @@ enable_get_args_filter = 'on'
 
 -- enable post_args filter
 enable_post_args_filter = 'on'
-balck_file_suffix = {"php","jsp"}
+black_file_suffix = {"php","jsp"}
 
 -- enable request rate limiter
 enable_req_rate_limiter = "on"

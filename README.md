@@ -44,6 +44,33 @@ http {
 }
 ```
 
+
+
+### waf
+
+配置文件的路径为/usr/local/openresty/nginx/waf/config.lua，它其实是一个lua文件，用于定义一些全局的配置项（变量）。配置项的含义如下：
+
+| 配置项                      | 数据类型 | 含义                                                         |
+| --------------------------- | -------- | ------------------------------------------------------------ |
+| enable_waf                  | string   | 是否启用WAF。on为启动，off为关闭，默认为on。                 |
+| rule_dir                    | string   | 规则文件的路径。默认为“/usr/local/openresty/nginx/waf/rules”。 |
+| dry_mode                    | string   | 是否开启演习模式，即不拦截请求。on为启动，off为关闭，默认为on。 |
+| enable_attack_log           | string   | 是否记录攻击日志。on为启用，off为关闭，默认为on。            |
+| log_dir                     | string   | 攻击日志的路径。默认为“/usr/local/openresty/nginx/waf/logs”  |
+| enable_white_ip_filter      | string   | 是否启用IP白名单。on为启动，off为关闭，默认为on。            |
+| enable_white_url_filter     | string   | 是否启用url白名单。on为启动，off为关闭，默认为on。           |
+| enable_black_ip_filter      | string   | 是否启用IP黑名单。on为启动，off为关闭，默认为on。            |
+| enable_black_url_filter     | string   | 是否启用url黑名单。on为启动，off为关闭，默认为on。           |
+| enable_user_agent_filter    | string   | 是否启用user_agent黑名单。on为启动，off为关闭，默认为on。    |
+| enable_cookie_attack_filter | string   | 是否启用cookie黑名单。on为启动，off为关闭，默认为on。        |
+| enable_get_args_filter      | string   | 是否启用get参数黑名单。on为启动，off为关闭，默认为on。       |
+| enable_post_args_filter     | string   | 是否启用post参数黑名单。on为启动，off为关闭，默认为on。      |
+| black_file_suffix           | string   | 恶意文件的后缀。默认为{"php","jsp"}。                        |
+| enable_req_rate_limiter     | string   | 是否启用速率控制。on为启动，off为关闭，默认为on。            |
+
+
+
+
 ## 测试
 ```shell
 curl 127.0.0.1

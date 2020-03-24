@@ -81,11 +81,11 @@ function _M.filter_request_body(client_post_args)
 end
 
 function _M.filter_file_suffix(file_suffix)
-    if not next(balck_file_suffix) then
+    if not next(black_file_suffix) then
         return
     end
 
-    for _,rule_suffix in ipairs(balck_file_suffix) do
+    for _,rule_suffix in ipairs(black_file_suffix) do
         if finder(file_suffix,rule_suffix,"jsjo") then
             if enable_attack_log == 'on' then
                 _M.log(_M.get_client_ip(),'post_args',ngx.var.request_uri,file_suffix)
