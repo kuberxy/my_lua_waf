@@ -34,7 +34,7 @@ function _M.log(ip,filter,uri,rule)
     }
     local log_line = cjson.encode(log_json_obj)
 
-    local log_name = log_dir .. '/' .. 'waf_' .. ngx.today() .. '.log'
+    local log_name = log_dir .. '/' .. 'waf-' .. ngx.today() .. '.log'
     local file = io.open(log_name,"a")
     if file then
         file:write(log_line.."\n")
@@ -67,7 +67,7 @@ function _M.filter_request_body(client_post_args)
         return
     end
 
-    for _,rule_post_args in ipairs(post_args_list) do
+    for _,rule_post_args in ipairs(post_args_rules) do
         if finder(ngx.unescape_uri(client_post_args),rule_post_args,'isjo') then
             if enable_attack_log == 'on' then
                 _M.log(ngx.var.remote_addr,'post_args',ngx.var.request_uri,client_post_args)

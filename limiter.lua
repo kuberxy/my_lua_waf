@@ -68,3 +68,5 @@ function _M.req_rate_limiter()
         end
     end
 end
+
+return _M
