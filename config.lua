@@ -2,7 +2,7 @@
 -- if log_mode is "on" then only record attack log but not reject request
 enable_waf = 'on'
 rule_dir = "/usr/local/openresty/nginx/waf/rules"
-log_mode = 'on'
+dry_mode = 'on'
 
 -- record attack log and attack log path
 enable_attack_log = 'on'
