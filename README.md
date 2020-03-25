@@ -1,6 +1,16 @@
 # my_lua_waf
 
-## 部署
+## 依赖
+
+```shell
+sudo apt install -y luarocks
+sudo luarocks install lua-resty-limit-rate
+```
+
+
+
+## 安装
+
 ```shell
 sudo mkdir -p /usr/local/openresty/nginx/waf
 cd /usr/local/openresty/nginx/waf
@@ -10,7 +20,10 @@ sudo mkdir -p /usr/local/openresty/nginx/waf/logs
 sudo chmod 777 /usr/local/openresty/nginx/waf/logs
 ```
 
+
+
 ## 配置
+
 ### openresty
 ```shell
 sudo vim  /usr/local/openresty/nginx/conf/nginx.conf

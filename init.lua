@@ -24,7 +24,7 @@ function _M.white_ip_filter()
     for _,rule_ip in ipairs(white_ip_rules) do
         if client_ip == rule_ip then
             if enable_attack_log == 'on' then
-                tools.log(client_ip,'white_ip',ngx.var.request_uri,client_ip)
+                tools.log(client_ip,'white_ip',ngx.var.request_uri,rule_ip)
             end
             return true
         end
@@ -50,7 +50,7 @@ function _M.white_url_filter()
     for _,rule_uri in ipairs(white_url_rules) do
         if rulefinder(client_request_uri,rule_uri,'isjo') then
             if enable_attack_log == 'on' then
-                tools.log(ngx.var.remote_addr,'white_url',client_request_uri,client_request_uri)
+                tools.log(ngx.var.remote_addr,'white_url',client_request_uri,rule_uri)
             end
             return true
         end
@@ -76,7 +76,7 @@ function _M.black_ip_filter()
     for _,rule_ip in ipairs(black_ip_rules) do
         if client_ip == rule_ip then
             if enable_attack_log == 'on' then
-                tools.log(client_ip,'black_ip',ngx.var.request_uri,client_ip)
+                tools.log(client_ip,'black_ip',ngx.var.request_uri,rule_ip)
             end
             if dry_mode ~= "on" then
                 ngx.exit(403)
@@ -105,7 +105,7 @@ function _M.black_url_filter()
     for _,rule_uri in ipairs(black_url_rules) do
         if rulefinder(client_request_uri,rule_uri,'isjo') then
             if enable_attack_log == 'on' then
-                tools.log(ngx.var.remote_addr,'black_url',client_request_uri,client_request_uri)
+                tools.log(ngx.var.remote_addr,'black_url',client_request_uri,rule_uri)
             end
             if dry_mode ~= "on" then
                 ngx.exit(403)
@@ -163,7 +163,7 @@ function _M.cookie_filter()
     for _,rule_cookie in ipairs(cookie_rules) do
         if rulefinder(client_cookie,rule_cookie,'isjo') then
             if enable_attack_log == 'on' then
-                tools.log(ngx.var.remote_addr,'cookie',ngx.var.request_uri,client_cookie)
+                tools.log(ngx.var.remote_addr,'cookie',ngx.var.request_uri,rule_cookie)
             end
             if dry_mode ~= "on" then
                 ngx.exit(403)
