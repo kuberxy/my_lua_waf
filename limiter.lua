@@ -10,7 +10,7 @@ function _M.req_rate_limiter()
     end
 
     -- global 40r/s 12000r/5m
-    local lim_global = limit_rate.new("limit_rate_store", 100, 12000, 4, nil, {
+    local lim_global,err = limit_rate.new("limit_rate_store", 100, 12000, 4, nil, {
         lock_enable = true,
         locks_shdict_name = "my_locks",
     })
@@ -20,7 +20,7 @@ function _M.req_rate_limiter()
     end
     
     -- single 10r/s 6000r/5m
-    local lim_single = limit_rate.new("limit_rate_store", 200, 6000, 2, 100, {
+    local lim_single,err = limit_rate.new("limit_rate_store", 200, 6000, 2, 100, {
         locks_shdict_name = "my_locks",
     })
     if not lim_single then
